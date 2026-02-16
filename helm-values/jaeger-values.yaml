@@ -1,0 +1,32 @@
+provisionDataStore:
+  cassandra: false
+
+storage:
+  type: elasticsearch
+  elasticsearch:
+    host: elasticsearch-master
+    port: 9200
+
+collector:
+  replicaCount: 3
+  service:
+    otlp:
+      grpc:
+        name: otlp-grpc
+        port: 4317
+
+query:
+  replicaCount: 2
+  service:
+    type: ClusterIP
+
+agent:
+  enabled: true
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 2Gi

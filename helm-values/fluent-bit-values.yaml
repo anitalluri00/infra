@@ -1,0 +1,31 @@
+config:
+  service: |
+    [SERVICE]
+        Flush 1
+        Daemon Off
+        Log_Level info
+  inputs: |
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*.log
+        Parser cri
+        Tag kube.*
+  filters: |
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log On
+        Keep_Log Off
+  outputs: |
+    [OUTPUT]
+        Name forward
+        Match *
+        Host logstash-logstash
+        Port 5044
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

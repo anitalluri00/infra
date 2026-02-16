@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: backend-smoke-test
+  namespace: mis-prod
+spec:
+  args:
+    - name: service-url
+      value: http://backend-preview.mis-prod.svc.cluster.local/health
+  metrics:
+    - name: smoke-check
+      successCondition: result == 0
+      provider:
+        job:
+          spec:
+            backoffLimit: 0
+            template:
+              spec:
+                restartPolicy: Never
+                containers:
+                  - name: curl
+                    image: curlimages/curl:8.5.0
+                    command: ["sh", "-c"]
+                    args:
+                      - "curl -sf {{args.service-url}} >/dev/null"

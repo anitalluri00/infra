@@ -1,0 +1,57 @@
+pipeline {
+  agent any
+
+  options {
+    timestamps()
+    disableConcurrentBuilds()
+    ansiColor('xterm')
+  }
+
+  parameters {
+    choice(name: 'ENV', choices: ['prod-primary', 'prod-dr'], description: 'Terraform environment')
+    choice(name: 'ACTION', choices: ['plan', 'apply'], description: 'Terraform action')
+  }
+
+  environment {
+    TF_IN_AUTOMATION = 'true'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Terraform Fmt/Validate') {
+      steps {
+        sh 'terraform fmt -check -recursive terraform'
+        sh './cicd/scripts/terraform_plan_apply.sh ${ENV} validate'
+      }
+    }
+
+    stage('Terraform Plan') {
+      steps {
+        sh './cicd/scripts/terraform_plan_apply.sh ${ENV} plan'
+      }
+    }
+
+    stage('Approval') {
+      when {
+        expression { params.ACTION == 'apply' }
+      }
+      steps {
+        input message: "Apply Terraform changes for ${params.ENV}?", ok: 'Apply'
+      }
+    }
+
+    stage('Terraform Apply') {
+      when {
+        expression { params.ACTION == 'apply' }
+      }
+      steps {
+        sh './cicd/scripts/terraform_plan_apply.sh ${ENV} apply'
+      }
+    }
+  }
+}

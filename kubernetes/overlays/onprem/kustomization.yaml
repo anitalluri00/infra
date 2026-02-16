@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patches:
+  - path: patch-ingress-onprem.yaml
+    target:
+      kind: Ingress
+      name: citizen-portal
+      namespace: mis-prod
+  - path: patch-secretstore-vault.yaml
+    target:
+      group: external-secrets.io
+      version: v1beta1
+      kind: SecretStore
+      name: aws-secretsmanager
+      namespace: mis-prod

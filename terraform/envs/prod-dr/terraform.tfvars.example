@@ -1,0 +1,9 @@
+project     = "mis"
+environment = "prod-dr"
+dr_region   = "us-west-2"
+
+tags = {
+  CostCenter = "GOV-MIS"
+  Compliance = "ISO27001"
+  DataClass  = "Sensitive"
+}
