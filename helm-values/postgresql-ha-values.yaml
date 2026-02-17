@@ -1,0 +1,21 @@
+postgresql:
+  replicaCount: 3
+  database: misdb
+  username: misadmin
+  existingSecret: postgres-ha-secret
+
+pgpool:
+  replicaCount: 2
+
+persistence:
+  enabled: true
+  size: 200Gi
+
+metrics:
+  enabled: true
+
+networkPolicy:
+  enabled: true
+
+volumePermissions:
+  enabled: true

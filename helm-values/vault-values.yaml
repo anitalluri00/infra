@@ -1,0 +1,30 @@
+global:
+  tlsDisable: false
+
+injector:
+  enabled: true
+  replicas: 2
+
+server:
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+  dataStorage:
+    enabled: true
+    size: 20Gi
+  auditStorage:
+    enabled: true
+    size: 10Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+
+ui:
+  enabled: true
+  serviceType: ClusterIP

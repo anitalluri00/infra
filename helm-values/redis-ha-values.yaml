@@ -1,0 +1,24 @@
+redis:
+  master:
+    persistence:
+      enabled: true
+      size: 20Gi
+  replica:
+    replicaCount: 3
+    persistence:
+      enabled: true
+      size: 20Gi
+
+sentinel:
+  enabled: true
+  quorum: 2
+
+auth:
+  enabled: true
+  existingSecret: redis-ha-secret
+
+metrics:
+  enabled: true
+
+networkPolicy:
+  enabled: true

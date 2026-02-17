@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: citizen-portal
+  namespace: mis-prod
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: 172.16.0.0/16,10.20.0.0/16
+spec:
+  tls:
+    - hosts:
+        - portal.internal.mis.local
+      secretName: portal-internal-tls
+  rules:
+    - host: portal.internal.mis.local
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-active
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-active
+                port:
+                  number: 80
