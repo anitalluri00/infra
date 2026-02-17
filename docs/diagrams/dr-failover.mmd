@@ -1,9 +1,0 @@
-flowchart LR
-  A["Primary Healthy"] --> B{"Health Check Fails?"}
-  B -- No --> A
-  B -- Yes --> C["Declare Incident"]
-  C --> D["Promote DR DB"]
-  D --> E["Scale DR App Tier"]
-  E --> F["Route53 Failover to DR"]
-  F --> G["Run Smoke Tests"]
-  G --> H["DR Active"]
